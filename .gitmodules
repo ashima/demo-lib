@@ -1,0 +1,3 @@
+[submodule "webgl-diagnostic"]
+	path = webgl-diagnostic
+	url = git://github.com/ashima/webgl-diagnostic.git
