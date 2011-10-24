@@ -1,0 +1,11 @@
+<?xml version="1.0" standalone="yes" ?>
+<manifest>
+  <script type="text/javascript"
+	  src="webgl-diagnostic/js/webgldiagdata.js"></script>
+  <script type="text/javascript"
+	  src="webgl-diagnostic/js/webgldiagnostic.js"></script>
+  <script type="text/javascript"
+	  src="js/diag.js"></script>
+  <script type="text/javascript"
+	  src="js/run.js"></script>
+</manifest>
