@@ -1,0 +1,15 @@
+#demo-frontis { margin: 2em }
+.demo-title { color: #333 }
+.demo-subtitle { color: #666 }
+button {
+    text-decoration: underline;
+    color: blue;
+    border: none;
+    font-size: 150%;
+    cursor: pointer;
+}
+.webgldiag-message {
+    display: none;
+    background-color: #eee;
+    padding: 1em;
+}

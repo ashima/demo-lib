@@ -2,6 +2,7 @@
 
 <xsl:stylesheet version="1.0"
 		xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+  <xsl:include href="path-utils.xsl" />
   <xsl:include href="webgl-diagnostic/lang/message.xsl" />
 
   <xsl:output method="html" omit-xml-declaration="yes" />
@@ -32,7 +33,7 @@
     <xsl:param name="overlay" />
     <xsl:variable name="id" select="@id" />
     <xsl:choose>
-      <xsl:when test="$id='ok'">
+      <xsl:when test="$id='ok' or $id='override'">
 	<button onclick="run()">
 	  <xsl:apply-templates select="$overlay/message[@id=$id]">
 	    <xsl:with-param name="messages" select="$overlay" />
@@ -59,38 +60,62 @@
     </html>
   </xsl:template>
   
+  <xsl:template match="link" mode="manifest">
+    <link>
+      <xsl:copy-of select="@*[local-name(.)!='data-src']" />
+    </link>
+  </xsl:template>
+  <xsl:template match="script" mode="manifest">
+    <xsl:copy-of select="." />
+  </xsl:template>
+
+  <xsl:template match="@*|node()" mode="article">
+    <xsl:copy-of select="." />
+  </xsl:template>
+  <xsl:template match="*" mode="article">
+    <xsl:param name="root" />
+    <xsl:element name="{local-name(.)}">
+      <xsl:apply-templates select="node()|@*" mode="article">
+	<xsl:with-param name="root" select="$root" />
+      </xsl:apply-templates>
+    </xsl:element>
+  </xsl:template>
+  <xsl:template match="script/@src" mode="article">
+    <xsl:param name="root" />
+    <xsl:attribute name="src">
+      <xsl:value-of select="concat($root,.)" />
+    </xsl:attribute>
+  </xsl:template>
+
   <xsl:template match="manifest">
+    <xsl:variable name="root">
+      <xsl:call-template name="dirname">
+	<xsl:with-param name="reldir" />
+	<xsl:with-param name="path" select="a[@rel='start']/@href" />	
+      </xsl:call-template>
+    </xsl:variable>
     <xsl:variable name="html" select="document(a[@rel='start']/@href)/html" />
     <head>
       <xsl:for-each
-	  select="$html/head/*[not(@rel) or (@rel!='prefetch' and @rel!='tag')]">
+	  select="$html/head/*[local-name(.)!='link' and local-name(.)!='script']">
 	<xsl:copy-of select="." />
       </xsl:for-each>
-      <xsl:for-each select="link[@rel='prefetch' or @rel='tag']">
-	<link>
-	  <xsl:copy-of select="@*[local-name(.)!='data-src']" />
-	</link>
-      </xsl:for-each>
+
+      <xsl:apply-templates select="link | script" mode="manifest" />
 
       <xsl:copy-of select="$exprs/head/*" />
-      <script type="text/javascript"
-	      src="demo-lib/webgl-diagnostic/js/webgldiagdata.js"></script>
-      <script type="text/javascript"
-	      src="demo-lib/webgl-diagnostic/js/webgldiagnostic.js"></script>
-      <script type="text/javascript"
-	      src="demo-lib/js/diag.js"></script>
-      <script type="text/javascript"
-	      src="demo-lib/js/run.js"></script>
     </head>
     <body onload="WebGLDiagnostic.diagnose(diag_out)">
       <article>
 	<xsl:attribute name="style">display: none</xsl:attribute>
 	<xsl:copy-of select="$html/body/article/@*" />
-	<xsl:copy-of select="$html/body/article/node()" />
+	<xsl:apply-templates select="$html/body/article/*" mode="article">
+	  <xsl:with-param name="root" select="$root" />
+	</xsl:apply-templates>
       </article>
       <div id="demo-frontis">
-	<h1><xsl:value-of select="$html/head/title" /></h1>
-	<h2><xsl:copy-of select="$demo-text/messages/*[@id='subtitle']/node()" /></h2>
+	<h1 class="demo-title"><xsl:value-of select="$html/head/title" /></h1>
+	<h2 class="demo-subtitle"><xsl:copy-of select="$demo-text/messages/*[@id='subtitle']/node()" /></h2>
 	<xsl:call-template name="webgl-diagnostic">
 	  <xsl:with-param name="overlay" select="$demo-text/messages" />
 	</xsl:call-template>

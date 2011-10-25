@@ -1,5 +1,6 @@
 <?xml version="1.0" standalone="yes" ?>
 <manifest>
+  <link rel="stylesheet" type="text/css" href="css/demo.css" />
   <script type="text/javascript"
 	  src="webgl-diagnostic/js/webgldiagdata.js"></script>
   <script type="text/javascript"
