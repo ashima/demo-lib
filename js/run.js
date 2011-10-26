@@ -6,9 +6,9 @@ function run() {
     window.onpopstate = function (e) {
 	if (e.state != null && e.state.webgl == 1) {
 	    container.style.display = "none";
-	    vdiv.style.display = "block";
+	    vdiv.style.display = "";
 	} else {
-	    container.style.display = "block";
+	    container.style.display = "";
 	    vdiv.style.display = "none";
 	}
     };
@@ -16,7 +16,7 @@ function run() {
     history.pushState({webgl:1},"");
 
     container.style.display = "none";
-    vdiv.style.display = "block";
+    vdiv.style.display = "";
 
     main();
 }
