@@ -10,6 +10,10 @@
     </manifest>
   </xsl:template>
 
+  <xsl:template match="text()">
+    <xsl:text>&#xA;</xsl:text>
+  </xsl:template>
+
   <xsl:template match="link[@rel='manifest']">
     <xsl:param name="root" />
     <xsl:apply-templates select="document(@href)/manifest/node()">
@@ -22,7 +26,7 @@
     </xsl:apply-templates>
   </xsl:template>
 
-  <xsl:template match="link | a">
+  <xsl:template match="link">
     <xsl:param name="root" />
     <xsl:call-template name="relativize">
       <xsl:with-param name="root" select="$root" />
@@ -30,12 +34,30 @@
     </xsl:call-template>
   </xsl:template>
 
-  <xsl:template match="script">
+  <xsl:template match="head//script[@src] | script[@src]">
     <xsl:param name="root" />
     <xsl:call-template name="relativize">
       <xsl:with-param name="root" select="$root" />
       <xsl:with-param name="attr">src</xsl:with-param>
     </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template match="body//script[@src]">
+    <xsl:param name="root" />
+    <link rel="tag">
+      <xsl:for-each select="@*">
+	<xsl:choose>
+	  <xsl:when test="local-name(.)='src'">
+	    <xsl:attribute name="href">
+	      <xsl:value-of select="concat($root,.)" />
+	    </xsl:attribute>
+	  </xsl:when>
+	  <xsl:otherwise>
+	    <xsl:copy-of select="." />
+	  </xsl:otherwise>
+	</xsl:choose>
+      </xsl:for-each>
+    </link>
   </xsl:template>
 
 </xsl:stylesheet>
