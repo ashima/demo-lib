@@ -91,10 +91,10 @@
     <xsl:variable name="root">
       <xsl:call-template name="dirname">
 	<xsl:with-param name="reldir" />
-	<xsl:with-param name="path" select="a[@rel='start']/@href" />	
+	<xsl:with-param name="path" select="link[@rel='start']/@href" />	
       </xsl:call-template>
     </xsl:variable>
-    <xsl:variable name="html" select="document(a[@rel='start']/@href)/html" />
+    <xsl:variable name="html" select="document(link[@rel='start']/@href)/html" />
     <head>
       <xsl:for-each
 	  select="$html/head/*[local-name(.)!='link' and local-name(.)!='script']">
