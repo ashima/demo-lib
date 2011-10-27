@@ -8,5 +8,6 @@ file.
 ## WebGL Demo Compatibility
 
 **demo-lib** makes a small number of DOM assumptions about its page target. These are:
+
  - The HTML fragment to be lifted into a wrapped demo is found in an **article** tag
  - The URLs of resources tracked by the manifest system are expressed relative to the present URL
