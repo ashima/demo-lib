@@ -1,5 +1,5 @@
 var demo_run = false;
-function run() {
+function run(main, pause) {
     // the first article in the page is the one we show
     var vdiv = document.getElementsByTagName('article')[0];
     var container = $$("demo-frontis");
@@ -16,7 +16,10 @@ function run() {
             if (e.state != null && e.state.webgl == 1) {
 		show_demo();
 		main();
-	    } else show_frontis();
+	    } else {
+		pause();
+		show_frontis();
+	    }
         };
         history.replaceState({webgl:0},"");
         history.pushState({webgl:1},"");

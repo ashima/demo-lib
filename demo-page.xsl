@@ -34,7 +34,7 @@
     <xsl:variable name="id" select="@id" />
     <xsl:choose>
       <xsl:when test="$id='ok' or $id='override'">
-	<button onclick="run()">
+	<button onclick="run(main, pause)">
 	  <xsl:apply-templates select="$overlay/message[@id=$id]">
 	    <xsl:with-param name="messages" select="$overlay" />
 	  </xsl:apply-templates>
