@@ -55,7 +55,7 @@
 
   <xsl:template match="@data-src">
     <xsl:attribute name="data-src">
-      <xsl:value-of select="concat(/manifest/@data-src-prefix,@data-src)" />
+      <xsl:value-of select="concat(/manifest/@data-src-prefix,.)" />
     </xsl:attribute>
   </xsl:template>
 
