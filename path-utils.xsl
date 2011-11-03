@@ -20,22 +20,4 @@
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template name="relativize">
-    <xsl:param name="root" />
-    <xsl:param name="attr" />
-    <xsl:element name="{local-name(.)}">
-      <xsl:for-each select="@*">
-        <xsl:choose>
-          <xsl:when test="local-name(.)=$attr">
-            <xsl:attribute name="{$attr}">
-              <xsl:value-of select="concat($root,.)" />
-            </xsl:attribute>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:copy-of select="." />
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:for-each>
-    </xsl:element>
-  </xsl:template>
 </xsl:stylesheet>

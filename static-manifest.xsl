@@ -28,36 +28,35 @@
 
   <xsl:template match="link">
     <xsl:param name="root" />
-    <xsl:call-template name="relativize">
-      <xsl:with-param name="root" select="$root" />
-      <xsl:with-param name="attr">href</xsl:with-param>
-    </xsl:call-template>
+    <link href="{concat($root,@href)}">
+      <xsl:apply-templates select="@*" />
+    </link>
   </xsl:template>
 
   <xsl:template match="head//script[@src] | script[@src]">
     <xsl:param name="root" />
-    <xsl:call-template name="relativize">
-      <xsl:with-param name="root" select="$root" />
-      <xsl:with-param name="attr">src</xsl:with-param>
-    </xsl:call-template>
+    <script src="{concat($root,@src)}">
+      <xsl:apply-templates select="@*" />
+    </script>
   </xsl:template>
 
   <xsl:template match="body//script[@src]">
     <xsl:param name="root" />
-    <link rel="tag">
-      <xsl:for-each select="@*">
-	<xsl:choose>
-	  <xsl:when test="local-name(.)='src'">
-	    <xsl:attribute name="href">
-	      <xsl:value-of select="concat($root,.)" />
-	    </xsl:attribute>
-	  </xsl:when>
-	  <xsl:otherwise>
-	    <xsl:copy-of select="." />
-	  </xsl:otherwise>
-	</xsl:choose>
-      </xsl:for-each>
+    <link rel="tag" src="{concat($root,@href)}">
+      <xsl:apply-templates select="@type" />
     </link>
+  </xsl:template>
+
+  <xsl:template match="@*">
+    <xsl:copy />
+  </xsl:template>
+
+  <xsl:template match="@href | @src" />
+
+  <xsl:template match="@data-src">
+    <xsl:attribute name="data-src">
+      <xsl:value-of select="concat(/manifest/@data-src-prefix,@data-src)" />
+    </xsl:attribute>
   </xsl:template>
 
 </xsl:stylesheet>
