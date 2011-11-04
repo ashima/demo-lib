@@ -61,9 +61,11 @@
   </xsl:template>
   
   <xsl:template match="link" mode="manifest">
-    <link>
-      <xsl:copy-of select="@*[local-name(.)!='data-src']" />
-    </link>
+    <xsl:if test="@rel!='start'">
+      <link>
+        <xsl:copy-of select="@*[local-name(.)!='data-src']" />
+      </link>
+    </xsl:if>
   </xsl:template>
   <xsl:template match="script" mode="manifest">
     <xsl:copy-of select="." />
