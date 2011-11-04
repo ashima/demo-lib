@@ -42,7 +42,7 @@
 
   <xsl:template match="body//script[@src]">
     <xsl:param name="root" />
-    <link rel="tag" src="{concat($root,@href)}">
+    <link rel="tag" href="{concat($root,@src)}">
       <xsl:apply-templates select="@type" />
     </link>
   </xsl:template>
