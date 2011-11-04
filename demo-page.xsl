@@ -86,6 +86,12 @@
       <xsl:value-of select="concat($root,.)" />
     </xsl:attribute>
   </xsl:template>
+  <xsl:template match="img/@src" mode="article">
+    <xsl:param name="root" />
+    <xsl:attribute name="src">
+      <xsl:value-of select="concat($root,.)" />
+    </xsl:attribute>
+  </xsl:template>
 
   <xsl:template match="manifest">
     <xsl:variable name="root">
