@@ -89,7 +89,14 @@
   <xsl:template match="img/@src" mode="article">
     <xsl:param name="root" />
     <xsl:attribute name="src">
-      <xsl:value-of select="concat($root,.)" />
+      <xsl:choose>
+        <xsl:when test="substring(.,1,4)='http'">
+          <xsl:copy />
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="concat($root,.)" />
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:attribute>
   </xsl:template>
 
