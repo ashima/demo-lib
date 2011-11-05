@@ -20,11 +20,15 @@
   </xsl:template>
 
   <xsl:template match="link[@data-src]" mode="fs">
-    <xsl:text>mkdir -p </xsl:text>
-    <xsl:call-template name="dirname">
-      <xsl:with-param name="reldir" />
-      <xsl:with-param name="path" select="@href" />
-    </xsl:call-template>
+    <xsl:variable name="dir">
+      <xsl:call-template name="dirname">
+        <xsl:with-param name="reldir" />
+        <xsl:with-param name="path" select="@href" />
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:if test="string-length($dir)!=0">
+      <xsl:text>mkdir -p </xsl:text><xsl:value-of select="$dir" />
+    </xsl:if>
   </xsl:template>
   
   <xsl:template match="link[@data-src]" mode="http">
@@ -38,7 +42,8 @@
     </xsl:variable>
     <xsl:text>wget </xsl:text>
     <xsl:value-of select="concat($prefix,@data-src)" />
-    <xsl:text> -nc -O </xsl:text>
+    <xsl:if test="starts-with(@type,'image/')"><xsl:text> -nc</xsl:text></xsl:if>
+    <xsl:text> -O </xsl:text>
     <xsl:value-of select="@href" />
   </xsl:template>
 </xsl:stylesheet>
