@@ -28,8 +28,16 @@
   </xsl:template>
   
   <xsl:template match="link[@data-src]" mode="http">
+    <xsl:variable name="prefix">
+      <xsl:if test="//head/@data-src-prefix">
+	<xsl:value-of select="//head/@data-src-prefix" />
+      </xsl:if>
+      <xsl:if test="/manifest/@data-src-prefix">
+	<xsl:value-of select="/manifest/@data-src-prefix" />
+      </xsl:if>
+    </xsl:variable>
     <xsl:text>wget </xsl:text>
-    <xsl:value-of select="@data-src" />
+    <xsl:value-of select="concat($prefix,@data-src)" />
     <xsl:text> -nc -O </xsl:text>
     <xsl:value-of select="@href" />
   </xsl:template>
