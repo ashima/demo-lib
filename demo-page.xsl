@@ -5,8 +5,6 @@
   <xsl:include href="path-utils.xsl" />
   <xsl:include href="webgl-diagnostic/lang/message.xsl" />
 
-  <xsl:output method="html" omit-xml-declaration="yes" />
-
   <xsl:param name="lang" select="'en'" />
   <xsl:variable
       name="exprs"
