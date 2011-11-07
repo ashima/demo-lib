@@ -5,6 +5,8 @@
   <xsl:include href="path-utils.xsl" />
   <xsl:include href="webgl-diagnostic/lang/message.xsl" />
 
+  <xsl:output method="html" omit-xml-declaration="yes" />
+
   <xsl:param name="lang" select="'en'" />
   <xsl:variable
       name="exprs"
@@ -51,8 +53,7 @@
 
   <xsl:template match="/">
     <!-- TODO: test, connect validator to build system -->
-    <!--<xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html>
-    </xsl:text>-->
+    <xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html></xsl:text>
     <html>
       <xsl:apply-templates />
     </html>
