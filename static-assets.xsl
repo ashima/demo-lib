@@ -25,7 +25,7 @@
     </xsl:variable>
     <xsl:text>curl </xsl:text>
     <xsl:value-of select="concat($prefix,@data-src)" />
-    <xsl:text> -o </xsl:text>
+    <xsl:text> --create-dirs -o </xsl:text>
     <xsl:value-of select="@href" />
     <xsl:text> -z </xsl:text>
     <xsl:value-of select="@href" />
