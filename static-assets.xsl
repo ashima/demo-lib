@@ -7,30 +7,13 @@
   
   <xsl:template match="/">
     <xsl:text>#!/bin/sh&#xA;&#xA;</xsl:text>
-    <xsl:apply-templates mode="fs" />
     <xsl:apply-templates mode="http" />
-  </xsl:template>
-
-  <xsl:template match="text()" mode="fs">
-    <xsl:text>&#xA;</xsl:text>
   </xsl:template>
 
   <xsl:template match="text()" mode="http">
     <xsl:text>&#xA;</xsl:text>
   </xsl:template>
 
-  <xsl:template match="link[@data-src]" mode="fs">
-    <xsl:variable name="dir">
-      <xsl:call-template name="dirname">
-        <xsl:with-param name="reldir" />
-        <xsl:with-param name="path" select="@href" />
-      </xsl:call-template>
-    </xsl:variable>
-    <xsl:if test="string-length($dir)!=0">
-      <xsl:text>mkdir -p </xsl:text><xsl:value-of select="$dir" />
-    </xsl:if>
-  </xsl:template>
-  
   <xsl:template match="link[@data-src]" mode="http">
     <xsl:variable name="prefix">
       <xsl:if test="//head/@data-src-prefix">
@@ -40,10 +23,11 @@
 	<xsl:value-of select="/manifest/@data-src-prefix" />
       </xsl:if>
     </xsl:variable>
-    <xsl:text>wget </xsl:text>
+    <xsl:text>curl </xsl:text>
     <xsl:value-of select="concat($prefix,@data-src)" />
-    <xsl:if test="starts-with(@type,'image/')"><xsl:text> -nc</xsl:text></xsl:if>
-    <xsl:text> -O </xsl:text>
+    <xsl:text> -o </xsl:text>
+    <xsl:value-of select="@href" />
+    <xsl:text> -z </xsl:text>
     <xsl:value-of select="@href" />
   </xsl:template>
 </xsl:stylesheet>
