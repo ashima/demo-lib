@@ -54,9 +54,7 @@
   <xsl:template match="/">
     <!-- TODO: test, connect validator to build system -->
     <!--<xsl:text disable-output-escaping='yes'>&lt;!DOCTYPE html></xsl:text>-->
-    <html>
-      <xsl:apply-templates />
-    </html>
+    <xsl:apply-templates />
   </xsl:template>
   
   <xsl:template match="link" mode="manifest">
@@ -109,6 +107,7 @@
       </xsl:call-template>
     </xsl:variable>
     <xsl:variable name="html" select="document(link[@rel='start']/@href)/html" />
+    <html>
     <head>
       <xsl:for-each
 	  select="$html/head/*[local-name(.)!='link' and local-name(.)!='script']">
@@ -135,5 +134,6 @@
 	</xsl:call-template>
       </div>
     </body>
+    </html>
   </xsl:template>
 </xsl:stylesheet>
