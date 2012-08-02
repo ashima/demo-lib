@@ -63,7 +63,7 @@
           <xsl:value-of select="concat(//head/@data-src-prefix,.)" />
         </xsl:when>
         <xsl:otherwise>
-          <xsl:copy />
+          <xsl:value-of select="." />
         </xsl:otherwise>
       </xsl:choose>
     </xsl:attribute>
