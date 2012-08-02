@@ -56,10 +56,10 @@
   <xsl:template match="@data-src">
     <xsl:attribute name="data-src">
       <xsl:choose>
-        <xsl:when test="/manifest">
+        <xsl:when test="/manifest and not(starts-with(.,'http'))">
           <xsl:value-of select="concat(/manifest/@data-src-prefix,.)" />
         </xsl:when>
-        <xsl:when test="//head/@data-src-prefix">
+        <xsl:when test="//head/@data-src-prefix and not(starts-with(.,'http'))">
           <xsl:value-of select="concat(//head/@data-src-prefix,.)" />
         </xsl:when>
         <xsl:otherwise>
