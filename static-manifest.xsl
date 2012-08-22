@@ -28,9 +28,14 @@
 
   <xsl:template match="link">
     <xsl:param name="root" />
-    <link href="{concat($root,@href)}">
-      <xsl:apply-templates select="@*" />
-    </link>
+    <xsl:choose>
+      <xsl:when test="@rel='start' and $root != ''" />
+      <xsl:otherwise>
+        <link href="{concat($root,@href)}">
+          <xsl:apply-templates select="@*" />
+        </link>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="head//script[@src] | script[@src]">
