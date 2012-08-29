@@ -7,6 +7,7 @@
 
   <xsl:output method="html" omit-xml-declaration="yes" />
 
+  <xsl:param name="reldir" select="''" />
   <xsl:param name="lang" select="'en'" />
   <xsl:variable
       name="exprs"
@@ -100,7 +101,7 @@
   <xsl:template match="manifest">
     <xsl:variable name="root">
       <xsl:call-template name="dirname">
-	<xsl:with-param name="reldir" />
+	<xsl:with-param name="reldir" select="$reldir" />
 	<xsl:with-param name="path" select="link[@rel='start']/@href" />	
       </xsl:call-template>
     </xsl:variable>
