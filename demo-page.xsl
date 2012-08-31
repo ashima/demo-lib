@@ -55,16 +55,39 @@
   <xsl:template match="/">
     <xsl:apply-templates />
   </xsl:template>
-  
-  <xsl:template match="link" mode="manifest">
-    <xsl:if test="@rel!='start'">
-      <link>
-        <xsl:copy-of select="@*[local-name(.)!='data-src']" />
-      </link>
-    </xsl:if>
+
+  <xsl:template name="prefix-href">
+    <xsl:param name="root" />
+    <xsl:attribute name="{local-name()}">
+      <xsl:choose>
+        <xsl:when test="substring(.,1,4)='http'">
+          <xsl:copy />
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="concat($root,.)" />
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:attribute>
   </xsl:template>
-  <xsl:template match="script" mode="manifest">
-    <xsl:copy-of select="." />
+
+  <xsl:template match="@data-local" mode="manifest" />
+  <xsl:template match="@data-src" mode="manifest" />
+  <xsl:template match="@src | @href" mode="manifest">
+    <xsl:param name="root" />
+    <xsl:call-template name="prefix-href">
+      <xsl:with-param name="root" select="$root" />
+    </xsl:call-template>
+  </xsl:template>
+  <xsl:template match="@*" mode="manifest"><xsl:copy /></xsl:template>
+  
+  <xsl:template match="link[@rel='start']" mode="manifest" />
+  <xsl:template match="link|script" mode="manifest">
+    <xsl:param name="root" />
+    <xsl:copy>
+      <xsl:apply-templates select="@*" mode="manifest">
+        <xsl:with-param name="root" select="$root" />
+      </xsl:apply-templates>
+    </xsl:copy>
   </xsl:template>
 
   <xsl:template match="@*|node()" mode="article">
@@ -78,27 +101,15 @@
       </xsl:apply-templates>
     </xsl:element>
   </xsl:template>
-  <xsl:template match="script/@src" mode="article">
+  <xsl:template match="img/@src | script/@src" mode="article">
     <xsl:param name="root" />
-    <xsl:attribute name="src">
-      <xsl:value-of select="concat($root,.)" />
-    </xsl:attribute>
-  </xsl:template>
-  <xsl:template match="img/@src" mode="article">
-    <xsl:param name="root" />
-    <xsl:attribute name="src">
-      <xsl:choose>
-        <xsl:when test="substring(.,1,4)='http'">
-          <xsl:copy />
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:value-of select="concat($root,.)" />
-        </xsl:otherwise>
-      </xsl:choose>
-    </xsl:attribute>
+    <xsl:call-template name="prefix-href">
+      <xsl:with-param name="root" select="$root" />
+    </xsl:call-template>
   </xsl:template>
 
   <xsl:template match="manifest">
+    <xsl:param name="reldir" select="$reldir" />
     <xsl:variable name="root">
       <xsl:call-template name="dirname">
 	<xsl:with-param name="reldir" select="$reldir" />
@@ -113,7 +124,9 @@
 	<xsl:copy-of select="." />
       </xsl:for-each>
 
-      <xsl:apply-templates select="link | script" mode="manifest" />
+      <xsl:apply-templates select="link | script" mode="manifest">
+        <xsl:with-param name="root" select="$root" />
+      </xsl:apply-templates>
 
       <xsl:copy-of select="$exprs/head/*" />
     </head>

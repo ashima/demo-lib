@@ -4,6 +4,8 @@
 		xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:include href="path-utils.xsl" />
 
+  <xsl:param name="rooted" select="false()" />
+
   <xsl:template match="/">
     <manifest>
       <xsl:apply-templates />
@@ -31,8 +33,10 @@
     <xsl:choose>
       <xsl:when test="@rel='start' and $root != ''" />
       <xsl:otherwise>
-        <link href="{concat($root,@href)}">
-          <xsl:apply-templates select="@*" />
+        <link>
+          <xsl:apply-templates select="@*">
+            <xsl:with-param name="root" select="$root" />
+          </xsl:apply-templates>
         </link>
       </xsl:otherwise>
     </xsl:choose>
@@ -40,15 +44,20 @@
 
   <xsl:template match="head//script[@src] | script[@src]">
     <xsl:param name="root" />
-    <script src="{concat($root,@src)}">
-      <xsl:apply-templates select="@*" />
+    <script>
+      <xsl:apply-templates select="@*">
+        <xsl:with-param name="root" select="$root" />
+      </xsl:apply-templates>
     </script>
   </xsl:template>
 
   <xsl:template match="body//script[@src]">
     <xsl:param name="root" />
-    <link rel="tag" href="{concat($root,@src)}">
-      <xsl:apply-templates select="@type" />
+    <link rel="tag">
+      <xsl:apply-templates select="@src | @type">
+        <xsl:with-param name="root" select="$root" />
+        <xsl:with-param name="attr" select="'href'" />
+      </xsl:apply-templates>
     </link>
   </xsl:template>
 
@@ -56,7 +65,36 @@
     <xsl:copy />
   </xsl:template>
 
-  <xsl:template match="@href | @src" />
+  <xsl:template name="make-data-local">
+    <xsl:param name="path" />
+    <xsl:for-each select="..">
+      <xsl:attribute name="data-local">
+        <xsl:value-of select="$path" />
+      </xsl:attribute>
+    </xsl:for-each>
+  </xsl:template>
+
+  <xsl:template match="@href | @src">
+    <xsl:param name="root" />
+    <xsl:param name="attr" select="local-name()" />
+    <xsl:choose>
+      <xsl:when test="$rooted">
+        <xsl:attribute name="{$attr}">
+          <xsl:value-of select="." />
+        </xsl:attribute>
+        <xsl:if test="$root!='' and not(../@data-src)">
+          <xsl:call-template name="make-data-local">
+            <xsl:with-param name="path" select="concat($root,.)" />
+          </xsl:call-template>
+        </xsl:if>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:attribute name="{$attr}">
+          <xsl:value-of select="concat($root,.)" />
+        </xsl:attribute>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 
   <xsl:template match="@data-src">
     <xsl:attribute name="data-src">
