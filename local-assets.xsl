@@ -5,6 +5,7 @@
   <xsl:include href="path-utils.xsl" />
   <xsl:output method="text" indent="no" />
 
+  <xsl:param name="profile" select="'static'" />
   <xsl:param name="action" select="'create'" />
   
   <xsl:template match="/">
@@ -46,7 +47,12 @@
       <xsl:text>mkdir -p `dirname </xsl:text>
       <xsl:value-of select="$path" />
       <xsl:text>`&#xA;</xsl:text>
-      <xsl:text>cp -f </xsl:text>
+      <xsl:if test="$profile='dev'">
+        <xsl:text>ln -fs `pwd`/</xsl:text>
+      </xsl:if>
+      <xsl:if test="$profile!='dev'">
+        <xsl:text>cp -f </xsl:text>
+      </xsl:if>
       <xsl:value-of select="@data-local" />
       <xsl:text> </xsl:text>
       <xsl:value-of select="$path" />
