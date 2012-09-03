@@ -129,6 +129,7 @@
       </xsl:apply-templates>
 
       <xsl:copy-of select="$exprs/head/*" />
+      <xsl:copy-of select="$html/head/link[@rel='alternate']" />
     </head>
     <body onload="WebGLDiagnostic.diagnose(diag_out)">
       <article>
