@@ -78,7 +78,7 @@
     <xsl:param name="root" />
     <xsl:param name="attr" select="local-name()" />
     <xsl:choose>
-      <xsl:when test="$rooted">
+      <xsl:when test="$rooted and not(contains(../@class,'extra'))">
         <xsl:attribute name="{$attr}">
           <xsl:value-of select="." />
         </xsl:attribute>
